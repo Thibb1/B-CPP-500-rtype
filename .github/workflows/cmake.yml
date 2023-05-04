@@ -28,7 +28,7 @@ jobs:
         - os: ubuntu-latest
           generator: "Unix Makefiles"
           name: "Bomberman_linux"
-          conanOptions: " -c tools.system.package_manager:mode=install"
+          conanOptions: " -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True"
     
     runs-on: ${{ matrix.os }}
 
