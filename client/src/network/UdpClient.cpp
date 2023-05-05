@@ -26,7 +26,15 @@ void UdpClient::stop() {
     _connected = false;
     _stop = true;
     _socket.cancel();
-    _socket.close();
+    if (_listener.joinable())
+        _listener.join();
+    if (_heartbeat.joinable())
+        _heartbeat.join();
+    if (_timeout.joinable())
+        _timeout.join();
+    if (_socket.is_open())
+        _socket.close();
+    std::cout << "Udp client stopped" << std::endl
 }
 
 /**
@@ -46,11 +54,8 @@ void UdpClient::start() {
     if (!_socket.is_open())
         _socket.open(udp::v4());
     _listener = std::thread([this]() { threadListener(); });
-    _listener.detach();
     _heartbeat = std::thread([this]() { threadHeartbeat(); });
-    _heartbeat.detach();
     _timeout = std::thread([this]() { threadTimeout(); });
-    _timeout.detach();
     std::cout << "Udp client started" << std::endl;
 }
 
@@ -120,8 +125,9 @@ void UdpClient::threadListener() {
         }
         if (ec) {
             std::cerr << "Error while receiving message: " << ec.message() << std::endl;
-            _connected = false;
-            break;
+            // _connected = false;
+            // break;
+            continue;
         }
         std::string msg(_buffer.data(), bytes_recvd);
         std::lock_guard<std::mutex> lock(_mutex);
