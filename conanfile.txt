@@ -2,7 +2,6 @@
 raylib/4.0.0
 asio/1.24.0
 nlohmann_json/3.11.2
-opengl/system
 
 [generators]
 cmake
