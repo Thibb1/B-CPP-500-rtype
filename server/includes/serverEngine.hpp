@@ -38,10 +38,9 @@ class server_engine {
                         _server.sendResponse("error");
                         continue;
                     }
-                    std::string p = cmd.substr(cmd.find_first_of(":") + 1);
-                    int port = p == cmd ? GetRandomValue(25000, 28000) : std::stoi(p);
-                    createRoom(port);
-                    _server.sendResponse(std::to_string(port)); // send port of the new room
+                    std::string port = cmd.substr(cmd.find_first_of(":") + 1);
+                    if (createRoom(port == cmd ? std::to_string(GetRandomValue(25000, 28000)) : port))
+                        _server.sendResponse(port);
                 } else if (cmd == "ping")
                     _server.sendResponse("pong");
                 else {
@@ -60,7 +59,7 @@ class server_engine {
             elem = new textbox({ 215, 225, 150, 22 }, DARKGRAY, WHITE, [this](std::string tmp){
                 _interface.remove(elem);
                 elem = nullptr;
-                createRoom(std::stoi(tmp));
+                createRoom(tmp);
             }, "Port : ");
             elem->onUnfocus([this](){
                 _interface.remove(elem);
@@ -82,7 +81,7 @@ class server_engine {
         _overlay.add(new textButton({0, 0, 30, 30}, BLACK, "<-", WHITE, [this](){
             _current_room = nullptr;
         }));
-        createRoom(12345);
+        createRoom("12345");
     };
     void run() {
         while (!WindowShouldClose() && running) {
@@ -94,8 +93,10 @@ class server_engine {
                     _interface.update();
                     _interface.draw();
                 } else {
-                    if (!_current_room->isRunning())
+                    if (!_current_room->isRunning()) {
                         _current_room = nullptr;
+                        continue;
+                    }
                     _current_room->displayLog();
                     _current_room->displayPlayer();
                     _current_room->displayEnemies();
@@ -106,17 +107,26 @@ class server_engine {
                 }
                 EndDrawing();
                 for (auto room: _rooms)
-                    if (!room->isRunning())
+                    if (!room->isRunning()) {
+                        if (_current_room == room)
+                            _current_room = nullptr;
                         deleteRoom(room->get_port());
+                    }
             } catch (std::exception &e) {
                 log(LOG_ERROR, e.what());
             }
         }
     };
-    void createRoom(int port) {
+    bool createRoom(std::string portString) {
+        int port = 0;
+        try {
+            port = std::stoi(portString);
+        } catch (std::exception &e) {
+            return false;
+        }
         for (auto room: _rooms)
             if (*room == port) {// create exception
-                return;
+                return false;
             }
         _rooms.push_back(new Room(port));
         _interface.add(new textButton({550, 50 + float(_rooms.size()) * 25, 200, 25}, Color{38, 38, 38, 255}, std::to_string(port), WHITE, [&](){
@@ -128,6 +138,7 @@ class server_engine {
                 }
         }))->addClass(std::to_string(port));
         log(LOG_INFO, "Created room " + std::to_string(port));
+        return true;
     }
     void deleteRoom(int port) {
         for (auto room: _rooms)
@@ -150,7 +161,7 @@ class server_engine {
         if (input.substr(0, 4) == "exit")
             running = false;
         else if (input.substr(0, 10) == "createRoom") {
-            createRoom(std::stoi(input.substr(11)));
+            createRoom(input.substr(11));
         } else if (input.substr(0, 8) == "getRooms") {
             for (auto room : _rooms)
                 if(room->isRunning())

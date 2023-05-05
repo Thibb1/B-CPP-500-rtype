@@ -192,8 +192,8 @@ void UdpServer::removeClient(const udp::endpoint &endpoint, bool erase) {
         if (erase) {
             _clients.erase(endpoint);
             dynamic_cast<text *>(_overlay.getId("players_nbr"))->setText(std::to_string(_clients.size()));
-            if (_clients.empty())
-                stop();
+            // if (_clients.empty())
+            //     stop();
         }
     }
 }
