@@ -3,6 +3,14 @@ name: CMake
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "CMakeLists.txt"
+      - "conanfile.txt"
+      - "client/**"
+      - "server/**"
+      - "engine/**"
+      - "thirdparty/**"
+      - "assets/**"
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:

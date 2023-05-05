@@ -8,11 +8,16 @@ This project is a rewrite of the classic arcade game, R-TYPE, in C++ with added 
 - Cross-platform compatibility, with support for Windows, Linux
 - Complete Entity Component System (ECS)
 
-## Requirements
+## Installation
+
+You can download the latest release [here](https://github.com/Thibb1/B-CPP-500-rtype/releases/latest)
+
+## Compile from source
+
+### Requirements
 - A C++17 compiler
 - cmake for Linux or Visual Studio 22 for Windows
 
-## Installation
 Clone the repository and compile the source code using the following commands:
 ### Linux
 ```
