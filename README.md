@@ -8,9 +8,16 @@ This project is a rewrite of the classic arcade game, R-TYPE, in C++ with added 
 - Cross-platform compatibility, with support for Windows, Linux
 - Complete Entity Component System (ECS)
 
+![](images/r-type_01.gif)
+
 ## Installation
 
 You can download the latest release [here](https://github.com/Thibb1/B-CPP-500-rtype/releases/latest)
+
+## Play the game
+`./bin/client [IP] [PORT]` to launch the client
+
+`./bin/server` to launch the server **(REQUIRED TO PLAY)**
 
 ## Compile from source
 
@@ -31,10 +38,6 @@ git clone git@github.com:EpitechPromo2025/B-CPP-500-LIL-5-2-rtype-romain.leemans
 cd B-CPP-500-LIL-5-2-rtype-romain.leemans
 ./windows_build
 ```
-## Play the game
-`./bin/client` to play the game as a client
-
-`./bin/server` to launch the server **(REQUIRED TO PLAY)**
 
 ## Network Protocol
 
