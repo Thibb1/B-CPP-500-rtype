@@ -117,16 +117,22 @@ bool UdpClient::isConnected() {
  * It listens for incoming messages and stores them in a queue
  */
 void UdpClient::threadListener() {
+    // Set socket to non-blocking mode
+    _socket.non_blocking(true);
+
     while (!_stop) {
         std::error_code ec;
         std::size_t bytes_recvd = _socket.receive_from(asio::buffer(_buffer), _endpoint, 0, ec);
         if (ec == asio::error::operation_aborted || ec == asio::error::bad_descriptor) {
             break;
         }
+        if (ec == asio::error::would_block) {
+            // No data received, do something else or sleep
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            continue;
+        }
         if (ec) {
             std::cerr << "Error while receiving message: " << ec.message() << std::endl;
-            // _connected = false;
-            // break;
             continue;
         }
         std::string msg(_buffer.data(), bytes_recvd);
