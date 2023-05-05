@@ -27,7 +27,7 @@ class Player {
      * @brief Construct a new Player object
      * 
      */
-    Player() : _position({0, 0}), _hp(3), _isAlive(true), _id(0), _name("") { _bounds = GetBoundingBoxAroundPoint(_position, 0.5); }
+    Player() : _position({0, 0}), _hp(3), _isAlive(true), _id(0), _name(""), _score(0) { _bounds = GetBoundingBoxAroundPoint(_position, 0.5); }
     /**
      * @brief Construct a new Player object
      * 
