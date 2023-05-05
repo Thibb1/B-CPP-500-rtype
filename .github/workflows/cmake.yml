@@ -38,24 +38,6 @@ jobs:
       with:
         version: 1.59.0
 
-    - name: Install extra packages
-      if: matrix.extra-packages != ''
-      run: sudo apt-get install ${{matrix.extra-packages}}
-
-    - name: Cache .conan
-      id: cache-conan
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-conan
-      with:
-        path: ~/.conan/data
-        key: ${{ runner.os }}-conan-${{ hashFiles('**/conanfile.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-conan-${{ hashFiles('**/conanfile.txt') }}
-          ${{ runner.os }}-conan-
-          ${{ runner.os }}-
-        
-
     - name: Create default profile
       run: conan profile new default --detect --force
 
