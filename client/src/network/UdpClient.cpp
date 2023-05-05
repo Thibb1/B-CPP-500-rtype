@@ -34,7 +34,7 @@ void UdpClient::stop() {
         _timeout.join();
     if (_socket.is_open())
         _socket.close();
-    std::cout << "Udp client stopped" << std::endl
+    std::cout << "Udp client stopped" << std::endl;
 }
 
 /**
