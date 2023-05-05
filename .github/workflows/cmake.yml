@@ -43,7 +43,7 @@ jobs:
       env:
         cache-name: cache-conan
       with:
-        path: ~/.conan
+        path: ~/.conan/data
         key: ${{ runner.os }}-conan-${{ hashFiles('**/conanfile.txt') }}
         restore-keys: |
           ${{ runner.os }}-conan-${{ hashFiles('**/conanfile.txt') }}
