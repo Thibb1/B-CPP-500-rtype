@@ -25,6 +25,7 @@ jobs:
           name: "rtype_linux"
           conanOptions: " -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True"
           update-profile: true
+          extra-packages: "pkg-config"
     
     runs-on: ${{ matrix.os }}
 
@@ -36,6 +37,10 @@ jobs:
       uses: turtlebrowser/get-conan@main
       with:
         version: 1.59.0
+
+    - name: Install extra packages
+      if: matrix.extra-packages != ''
+      run: sudo apt-get install ${{matrix.extra-packages}}
 
     - name: Cache .conan
       id: cache-conan
