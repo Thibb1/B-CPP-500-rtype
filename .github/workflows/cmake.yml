@@ -53,7 +53,7 @@ jobs:
 
     - name: Create default profile
       if: ${{ steps.cache-conan.outputs.cache-hit != 'true' }}
-      run: conan profile new default --detect
+      run: conan profile new default --detect --force
 
     - name: Update profile
       if: matrix.update-profile == true
